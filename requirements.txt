@@ -7,9 +7,13 @@ sentence-transformers==2.7.0    # Sentence embedding models (e.g. BGE, E5, LaBSE
 faiss-gpu==1.7.2                # Fast vector similarity search for RAG
 bitsandbytes==0.43.1            # Efficient 4-bit/8-bit quantized model loading
 numpy==1.24.1
+pydantic>=2.11.4
+tinydb==4.11.0
 
-# Linters and code quality tools.
+# Linters and code quality tools. TODO: move to dev dependencies
 black==24.4.2                   # Code formatter
 flake8==7.0.0                   # Linting for style and syntax
 mypy==1.10.0                    # Static type checking
 pre-commit==3.7.0               # Git hook manager for code quality automation
+isort==5.13.2                   # Sorting and grouping of import statements
+yamllint==1.32.0                # Linting for YAML files

@@ -25,6 +25,7 @@ clean:
 # Format code with black
 format:
 	black .
+	isort .
 
 # Run linters
 lint:

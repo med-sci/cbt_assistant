@@ -2,17 +2,26 @@ from abc import ABC, abstractmethod
 from typing import Optional
 from enum import Enum
 from transformers import AutoModelForCausalLM, AutoTokenizer, PreTrainedTokenizer, PreTrainedModel
+from ..configuration.templates import ModelConfig
 import torch
 
 
 class Model(ABC):
-    def __init__(self, model_id: str, device: Optional[str] = "cuda"):
-        self._model_id = model_id
-        self._device = device
+    def __init__(self, config: ModelConfig):
+        self._model_id = config.model_id
+        self._device = config.device
 
     @abstractmethod
     def generate(self, prompt: str, max_tokens: int = 200) -> str:
-        pass
+        raise NotImplementedError
+
+    @abstractmethod
+    def _load_tokenizer(self) -> PreTrainedTokenizer:
+        raise NotImplementedError
+
+    @abstractmethod
+    def _load_model(self) -> PreTrainedModel:
+        raise NotImplementedError
 
 
 class HuggingFaceModel(Model):
@@ -20,14 +29,12 @@ class HuggingFaceModel(Model):
     Universal model runner for HuggingFace causal LLMs.
     """
 
-    def __init__(self, model_id: str, device: str = "cuda", system_prompt: str = ""):
+    def __init__(self, config: ModelConfig):
         """
-        :param model_id: Model ID or local path.
-        :param device: Device to load model on, e.g. "cuda", "cpu", or "auto".
-        :param system_prompt: Text to prepend to each prompt.
+        :param config: Model configuration.
         """
-        super().__init__(model_id, device)
-        self._system_prompt = system_prompt
+        super().__init__(config)
+        self._system_prompt = config.system_prompt
         self._tokenizer = self._load_tokenizer()
         self._model = self._load_model()
 
@@ -76,5 +83,5 @@ class HuggingFaceModel(Model):
         return decoded[len(full_prompt):].strip()
 
 
-class HuggingFaceModels(Enum):
+class AvailableHuggingFaceModels(Enum):
     PHI2 = "microsoft/phi-2"

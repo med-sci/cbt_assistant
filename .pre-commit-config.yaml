@@ -13,3 +13,13 @@ repos:
     rev: v1.10.0
     hooks:
       - id: mypy
+
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+
+  - repo: https://github.com/adrienverge/yamllint
+    rev: 1.32.0
+    hooks:
+      - id: yamllint
