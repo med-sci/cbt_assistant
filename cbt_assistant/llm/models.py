@@ -8,10 +8,7 @@ import torch
 
 class Model(ABC):
     def __init__(self, config: ModelConfig):
-        self._model_id = config.model_id
-        self._device = config.device
-        self._max_tokens = config.max_tokens
-        self._system_prompt = config.system_prompt
+        self._config = config
 
     @abstractmethod
     def generate(self, prompt: str) -> str:
@@ -56,8 +53,8 @@ class HuggingFaceModel(Model):
         :rtype: PreTrainedModel
         """
         return AutoModelForCausalLM.from_pretrained(
-            self._model_id,
-            device_map=self._device,
+            self._config.model_id,
+            device_map=self._config.device,
             torch_dtype=torch.float32,
             load_in_4bit=True,
         )
@@ -74,9 +71,15 @@ class HuggingFaceModel(Model):
         full_prompt = self._system_prompt + prompt
 
         inputs = self._tokenizer(full_prompt, return_tensors="pt").to(
-            self._device
+            self._config.device
         )
-        outputs = self._model.generate(**inputs, max_new_tokens=self._max_tokens)
+        outputs = self._model.generate(
+            **inputs,
+            max_new_tokens=self._config.max_tokens,
+            temperature=self._config.temperature,
+            top_k=self._config.top_k,
+            top_p=self._config.top_p
+        )
         decoded = self._tokenizer.decode(outputs[0], skip_special_tokens=True)
 
         return decoded[len(full_prompt):].strip()

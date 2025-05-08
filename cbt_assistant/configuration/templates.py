@@ -1,4 +1,5 @@
 from pydantic import BaseModel, validator
+from typing import Optional
 from enum import Enum
 from ..llm.models import AvailableHuggingFaceModels
 from ..rag.embedder import SentenceTransformersEmbedderModels
@@ -14,6 +15,9 @@ class ModelConfig(BaseModel):
     model_id: str = AvailableHuggingFaceModels.PHI2.value
     system_prompt: str = ""
     max_tokens: int = 200
+    temperature: float = 1.0,
+    top_k: Optional[int] = None,
+    top_p: Optional[float] = None
 
     @validator("model_id")
     def validate_model_id(cls, v):
