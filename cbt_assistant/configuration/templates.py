@@ -13,6 +13,7 @@ class ModelConfig(BaseModel):
     device: Device
     model_id: str = AvailableHuggingFaceModels.PHI2.value
     system_prompt: str = ""
+    max_tokens: int = 200
 
     @validator("model_id")
     def validate_model_id(cls, v):
@@ -25,6 +26,7 @@ class ModelConfig(BaseModel):
 
 class RAGConfig(BaseModel):
     faiss_index_path: str
+    document_store_path: str
     embed_model: str = SentenceTransformersEmbedderModels.E5_SMALL.value
     top_k: int = 5
 

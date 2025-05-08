@@ -10,9 +10,11 @@ class Model(ABC):
     def __init__(self, config: ModelConfig):
         self._model_id = config.model_id
         self._device = config.device
+        self._max_tokens = config.max_tokens
+        self._system_prompt = config.system_prompt
 
     @abstractmethod
-    def generate(self, prompt: str, max_tokens: int = 200) -> str:
+    def generate(self, prompt: str) -> str:
         raise NotImplementedError
 
     @abstractmethod
@@ -34,7 +36,6 @@ class HuggingFaceModel(Model):
         :param config: Model configuration.
         """
         super().__init__(config)
-        self._system_prompt = config.system_prompt
         self._tokenizer = self._load_tokenizer()
         self._model = self._load_model()
 
@@ -61,14 +62,12 @@ class HuggingFaceModel(Model):
             load_in_4bit=True,
         )
 
-    def generate(self, prompt: str, max_tokens: int = 200) -> str:
+    def generate(self, prompt: str) -> str:
         """
         Generate a response from the model.
 
         :param prompt: Input text
         :type prompt: str
-        :param max_tokens: Maximum number of new tokens to generate
-        :type max_tokens: int
         :return: Model's textual response
         :rtype: str
         """
@@ -77,7 +76,7 @@ class HuggingFaceModel(Model):
         inputs = self._tokenizer(full_prompt, return_tensors="pt").to(
             self._device
         )
-        outputs = self._model.generate(**inputs, max_new_tokens=max_tokens)
+        outputs = self._model.generate(**inputs, max_new_tokens=self._max_tokens)
         decoded = self._tokenizer.decode(outputs[0], skip_special_tokens=True)
 
         return decoded[len(full_prompt):].strip()

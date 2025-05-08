@@ -6,9 +6,12 @@ accelerate==0.30.1              # Device management (CPU/GPU) and model dispatch
 sentence-transformers==2.7.0    # Sentence embedding models (e.g. BGE, E5, LaBSE)
 faiss-gpu==1.7.2                # Fast vector similarity search for RAG
 bitsandbytes==0.43.1            # Efficient 4-bit/8-bit quantized model loading
-numpy==1.24.1
-pydantic>=2.11.4
-tinydb==4.11.0
+numpy==1.24.1                   # Numerical computing and array operations
+pydantic>=2.11.4                # Data validation and settings management
+tinydb==4.11.0                  # Lightweight document-oriented database
+pymupdf==1.23.7                 # PDF parsing engine (PyMuPDF)
+tqdm==4.66.2                    # Progress bars for document ingestion
+tiktoken==0.5.1                 # Token-aware chunking
 
 # Linters and code quality tools. TODO: move to dev dependencies
 black==24.4.2                   # Code formatter

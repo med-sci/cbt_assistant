@@ -17,6 +17,13 @@ class DocumentRecord(Enum):
     text = "text"
     meta = "meta"
 
+class MetaField(Enum):
+    SOURCE = "source"
+    PAGE = "page"
+    CHUNK = "chunk"
+    TYPE = "type"
+    TOKENS = "tokens"
+
 
 class BaseDocumentStore(ABC):
     @abstractmethod
