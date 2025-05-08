@@ -1,0 +1,30 @@
+FROM nvidia/cuda:12.1.1-cudnn8-devel-ubuntu22.04
+
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install system utilities
+RUN apt-get update && apt-get install -y \
+    git \
+    vim \
+    htop \
+    nvtop \
+    curl \
+    wget \
+    ca-certificates \
+    python3.10 \
+    python3-pip \
+    && rm -rf /var/lib/apt/lists/*
+
+# Set Python alias
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python3.10 1
+
+# Set working directory
+WORKDIR /workspace
+
+# Copy requirements and install Python packages
+COPY requirements.txt .
+RUN pip3 install --upgrade pip && pip3 install -r requirements.txt && \
+    pip3 install -e .
+
+# Default command: keep container running
+CMD ["tail", "-f", "/dev/null"]
