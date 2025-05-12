@@ -9,3 +9,7 @@ rag:
   faiss_index_path: "data/faiss/index_v1.faiss"
   document_store_path: "data/document_store/v1.json"
   top_k: 3
+
+semantic_filter:
+  threshold: 0.45
+  topics_path: "data/cbt_topics.txt"

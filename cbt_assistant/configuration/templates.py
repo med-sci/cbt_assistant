@@ -43,6 +43,12 @@ class RAGConfig(BaseModel):
         return v
 
 
+class SemanticFilterConfig(BaseModel):
+    threshold: float = 0.45
+    topics_path: str = "data/cbt_topics.txt"
+
+
 class AppConfig(BaseModel):
     model: ModelConfig = ModelConfig()
-    rag: RAGConfig = RAGConfig()
+    rag: Optional[RAGConfig] = None
+    semantic_filter: Optional[SemanticFilterConfig] = None

@@ -3,6 +3,7 @@ from typing import List, Optional
 import torch
 import torch.nn.functional as F
 from cbt_assistant.rag.embedder import BaseEmbedder
+from cbt_assistant.semantic_filtering.rejection import RejectionMessageGenerator
 
 
 class BaseSemanticFilter(ABC):
@@ -38,6 +39,7 @@ class SimilaritySemanticFilter(BaseSemanticFilter):
         self._threshold = threshold
         self._topic_vectors = torch.tensor(self._embedder.embed(self._topics), dtype=torch.float32)
         self._last_decision: Optional[tuple[float, bool]] = None
+        self._rejection_generator = RejectionMessageGenerator()
 
     def is_relevant(self, query: str) -> bool:
         """
@@ -69,3 +71,6 @@ class SimilaritySemanticFilter(BaseSemanticFilter):
             f"Decision: {'Relevant' if decision else 'Irrelevant'}\n"
             f"Topics checked: {', '.join(self._topics)}"
         )
+
+    def get_rejection_message(self) -> str:
+        return self._rejection_generator.generate()
