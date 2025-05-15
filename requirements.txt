@@ -12,6 +12,7 @@ tinydb==4.11.0                  # Lightweight document-oriented database
 pymupdf==1.23.7                 # PDF parsing engine (PyMuPDF)
 tqdm==4.66.2                    # Progress bars for document ingestion
 tiktoken==0.5.1                 # Token-aware chunking
+datasets==2.14.5                # HuggingFace dataset library
 
 # Linters and code quality tools. TODO: move to dev dependencies
 black==24.4.2                   # Code formatter
